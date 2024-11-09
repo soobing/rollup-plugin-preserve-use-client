@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "rollup-plugin-preserve-use-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Rollup plugin to preserve 'use client' directives for React 18 components.",
   "types": "dist/index.d.ts",
   "main": "dist/index.cjs",
