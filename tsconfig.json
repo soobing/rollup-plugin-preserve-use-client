@@ -1,15 +1,18 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "lib": ["es2017"],
-    "target": "ES2015",
+    "target": "ES6",
     "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true
+    "noEmit": true,
+    "outDir": "./dist"
   },
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "files": ["src/index.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
