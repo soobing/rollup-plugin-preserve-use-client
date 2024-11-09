@@ -1,0 +1,19 @@
+{
+  "name": "rollup-plugin-preserve-use-client",
+  "version": "1.0.0",
+  "description": "A Rollup plugin to preserve 'use client' directives for React 18 components.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rollup",
+    "plugin",
+    "react",
+    "use client",
+    "server components",
+    "client components"
+  ],
+  "author": "soobing <qls0147@naver.com>",
+  "license": "MIT"
+}
