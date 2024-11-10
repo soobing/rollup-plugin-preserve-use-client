@@ -12,6 +12,7 @@
     "watch": "npm run build --watch"
   },
   "keywords": [
+    "rollup-plugin",
     "rollup",
     "plugin",
     "react",
