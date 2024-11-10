@@ -5,12 +5,16 @@ export default function preserveUseClientDirective(): Plugin {
 
   return {
     name: 'preserve-use-client-directive',
-    transform(code, id) {
-      const firstLine = code.split('\n')[0].trim();
-      if (firstLine === "'use client';" || firstLine === '"use client";') {
-        useClientFiles.add(id);
+    moduleParsed({ ast, id }) {
+      if (ast && ast.body && ast.body[0]?.type === 'ExpressionStatement') {
+        const expression = ast.body[0].expression;
+        if (
+          expression.type === 'Literal' &&
+          expression.value === 'use client'
+        ) {
+          useClientFiles.add(id);
+        }
       }
-      return null;
     },
     generateBundle(options, bundle) {
       for (const [, fileData] of Object.entries(bundle)) {
