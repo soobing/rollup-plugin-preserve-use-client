@@ -26,6 +26,76 @@ export default {
 
 React 18 Compatibility: Ensures that `'use client'` directives are maintained, making it easier to differentiate between server and client components in your React 18 projects.
 
+
+## Component-Based Bundling
+
+If you need to bundle components individually while ensuring the `'use client'` directive is preserved only where necessary, you can configure your Rollup (or Vite) build process as shown below:
+
+### Example Configuration
+
+```
+# Folder Structure Example
+
+packages/
+├── components/          
+│   ├── atoms/           
+│   │   ├── Component1
+│   │   │  ├── index.tsx
+│   │   │  ├── component1.module.css
+│   │   │  ├── component1.stories.tsx
+│   │   ├── Component2
+│   │   │  ├── index.tsx
+│   │   │  ├── component2.module.css
+│   │   │  ├── component2.stories.tsx
+│   ├── molecules/       
+│   ├── organisms/       
+│   ├── templates/       
+├── main.ts              # Root entry point for the library
+```
+
+```ts
+import { defineConfig } from 'vite';
+import { glob } from 'glob';
+import { extname, relative } from 'path';
+import { fileURLToPath } from 'url';
+import preserveUseClientDirective from 'rollup-plugin-preserve-use-client';
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: Object.fromEntries(
+        glob
+          .sync('packages/**/*.{ts,tsx}', {
+            ignore: ['packages/**/*.stories.tsx'],
+          })
+          .map((file) => [
+            relative(
+              'packages',
+              file.slice(0, file.length - extname(file).length),
+            ),
+            fileURLToPath(new URL(file, import.meta.url)),
+          ]),
+      ),
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        entryFileNames: '[name].js',
+      },
+    },
+  },
+  plugins: [preserveUseClientDirective()],
+});
+```
+
+### How It Works
+1. **File Discovery with `glob`:** Searches for all `.ts` and `.tsx` files in the `packages` directory and sets each file as an individual entry point for bundling. Excludes unnecessary files like `stories`.
+
+2. **Mapping Entries with `Object.fromEntries`:** Maps each discovered file as a separate entry point for Rollup, allowing fine-grained control over the bundling process.
+
+3. **Custom Output Naming:** Configures `entryFileNames` and `assetFileNames` to generate unique file names for each component, creating distinct output files.
+
+By applying this configuration, you can generate separate bundles for each component. This ensures that the `'use client'` directive is applied only to the appropriate components without affecting others.
+
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a bug report or feature request via GitHub issues.
